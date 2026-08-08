@@ -3,12 +3,13 @@ import { getSettings } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
 
-const SOSMED: { key: "facebook" | "instagram" | "telegram" | "twitter" | "tiktok"; icon: string }[] = [
+const SOSMED: { key: "facebook" | "instagram" | "telegram" | "twitter" | "tiktok" | "youtube"; icon: string }[] = [
   { key: "facebook", icon: "fa-facebook" },
   { key: "instagram", icon: "fa-instagram" },
   { key: "telegram", icon: "fa-telegram" },
   { key: "twitter", icon: "fa-x-twitter" },
   { key: "tiktok", icon: "fa-tiktok" },
+  { key: "youtube", icon: "fa-youtube" },
 ];
 
 export async function generateMetadata(): Promise<Metadata> {

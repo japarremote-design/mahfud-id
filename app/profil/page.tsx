@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import Hero from "@/components/section/Hero";
 import { getSettings } from "@/lib/settings";
 import { getAll, sortByUrutan } from "@/lib/data";
 
@@ -7,7 +8,6 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
-  const namaLengkap = `${s.namaTokoh}${s.gelarSingkat ? `, ${s.gelarSingkat}` : ""}`;
   return { title: "Profil", description: s.deskripsiSingkat, alternates: { canonical: `${s.siteUrl}/profil` } };
 }
 
@@ -22,27 +22,12 @@ export default async function ProfilPage() {
   const sortedPeran = sortByUrutan(peran);
   const sortedStatistik = sortByUrutan(statistik);
   const sortedRiwayat = sortByUrutan(riwayat);
-  const namaLengkap = `${s.namaTokoh}${s.gelarSingkat ? `, ${s.gelarSingkat}` : ""}`;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10 space-y-10">
-      <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
-        {s.banner && (
-          <div className="w-full relative bg-gray-950 aspect-[21/9] md:aspect-[3/1]">
-            <Image src={s.banner} alt={namaLengkap} fill className="object-cover object-center" />
-          </div>
-        )}
-        <div className="p-6 md:p-8 space-y-3">
-          {s.jabatanBadge && (
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-light border border-brand/20 text-brand-dark text-xs font-semibold tracking-wide">
-              <i className="fa-solid fa-circle-check text-[10px]" /> {s.jabatanBadge}
-            </div>
-          )}
-          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">{namaLengkap}</h1>
-          <p className="text-gray-600 text-base leading-relaxed">{s.deskripsiSingkat}</p>
-        </div>
-      </div>
+    <div className="space-y-10 pb-10">
+      <Hero settings={s} />
 
+      <div className="max-w-4xl mx-auto px-4 space-y-10">
       {sortedStatistik.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {sortedStatistik.map((st) => (
@@ -95,6 +80,7 @@ export default async function ProfilPage() {
           <p className="text-sm">Isi Statistik, Riwayat, dan Section Profil dari panel /admin agar halaman ini lengkap.</p>
         </div>
       )}
+      </div>
     </div>
   );
 }

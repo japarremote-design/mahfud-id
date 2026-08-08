@@ -10,6 +10,7 @@ export interface SiteSettings {
   namaTokoh: string;
   gelarSingkat: string;      // "S.Pd.I., M.E.I." — ditampilkan nempel nama
   jabatanBadge: string;      // teks badge kecil di hero, ex: "ANGGOTA DPRD KABUPATEN SAMPANG"
+  kutipanHero: string;       // kutipan 1 kalimat, jadi headline besar di hero (bukan nama)
   deskripsiSingkat: string;  // bio 2-3 kalimat
   banner: string;            // URL foto banner hero
   logoPart1: string;         // ex: "MAH" (kotak warna)
@@ -23,6 +24,7 @@ export interface SiteSettings {
   telegram: string;
   twitter: string;
   tiktok: string;
+  youtube: string;
   footerKeterangan: string;  // ex: "Anggota DPRD Kabupaten Sampang, Komisi IV (Fraksi PKS)"
   tahunMulaiCopyright: string; // ex: "2026"
   poweredByNama: string;     // ex: "qfazdigital.my.id"
@@ -34,6 +36,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   namaTokoh: "Nama Tokoh",
   gelarSingkat: "",
   jabatanBadge: "JABATAN / GELAR",
+  kutipanHero: "",
   deskripsiSingkat: "Tuliskan bio singkat tokoh di panel Pengaturan Situs.",
   banner: "",
   logoPart1: "LOG",
@@ -47,6 +50,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   telegram: "",
   twitter: "",
   tiktok: "",
+  youtube: "",
   footerKeterangan: "",
   tahunMulaiCopyright: String(new Date().getFullYear()),
   poweredByNama: "qfazdigital.my.id",
@@ -73,6 +77,7 @@ export const SETTINGS_FORM_GROUPS: { title: string; fields: { key: keyof SiteSet
       { key: "namaTokoh", label: "Nama Lengkap" },
       { key: "gelarSingkat", label: "Gelar (nempel di belakang nama)", placeholder: "S.Pd.I., M.E.I." },
       { key: "jabatanBadge", label: "Badge Jabatan (di hero)", placeholder: "ANGGOTA DPRD KABUPATEN SAMPANG" },
+      { key: "kutipanHero", label: "Kutipan Headline Hero (opsional, 1 kalimat — lebih berkesan daripada nama besar)", type: "textarea", placeholder: "\"Melayani rakyat adalah amanah, bukan sekadar jabatan.\"" },
       { key: "deskripsiSingkat", label: "Deskripsi / Bio Singkat", type: "textarea" },
       { key: "banner", label: "Foto Banner (URL gambar)", type: "image" },
     ],
@@ -101,6 +106,7 @@ export const SETTINGS_FORM_GROUPS: { title: string; fields: { key: keyof SiteSet
       { key: "telegram", label: "URL Telegram" },
       { key: "twitter", label: "URL X / Twitter" },
       { key: "tiktok", label: "URL TikTok" },
+      { key: "youtube", label: "URL YouTube" },
     ],
   },
   {

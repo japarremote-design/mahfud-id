@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getSettings } from "@/lib/settings";
 import { getAll } from "@/lib/data";
+import Hero from "@/components/section/Hero";
 
 export const dynamic = "force-dynamic";
 
@@ -16,34 +17,10 @@ export default async function HomePage() {
   const upcomingEvents = events.filter((e) => e.status === "akan datang").slice(0, 3);
   const latestArtikel = artikel.filter((a) => a.status === "terbit").slice(0, 4);
   const latestGaleri = galeri.slice(0, 4);
-  const namaLengkap = `${s.namaTokoh}${s.gelarSingkat ? `, ${s.gelarSingkat}` : ""}`;
 
   return (
     <div className="space-y-16">
-      <section className="bg-white">
-        {s.banner && (
-          <div className="w-full relative bg-gray-950 aspect-[21/9] md:aspect-[3/1]">
-            <Image src={s.banner} alt={namaLengkap} fill className="object-cover object-center" priority />
-          </div>
-        )}
-        <div className="max-w-5xl mx-auto px-4 py-8 space-y-3">
-          {s.jabatanBadge && (
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-light border border-brand/20 text-brand-dark text-xs font-semibold tracking-wide">
-              <i className="fa-solid fa-circle-check text-[10px]" /> {s.jabatanBadge}
-            </div>
-          )}
-          <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 tracking-tight">{namaLengkap}</h1>
-          <p className="text-gray-600 text-base leading-relaxed max-w-2xl">{s.deskripsiSingkat}</p>
-          <div className="flex gap-3 pt-2">
-            <Link href="/profil" className="bg-brand hover:bg-brand-dark text-white font-semibold px-5 py-2.5 rounded-xl text-sm">
-              Profil Selengkapnya
-            </Link>
-            <Link href="/aspirasi" className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold px-5 py-2.5 rounded-xl text-sm">
-              Kirim Aspirasi
-            </Link>
-          </div>
-        </div>
-      </section>
+      <Hero settings={s} showCta />
 
       <div className="max-w-5xl mx-auto px-4 space-y-16">
         <section>

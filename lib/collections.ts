@@ -1,6 +1,6 @@
 // Definisi semua koleksi yang bisa di-CRUD dari /admin.
 // Nambah koleksi baru = nambah satu entri di sini, form admin otomatis muncul.
-export type FieldType = "text" | "textarea" | "richtext" | "image" | "date" | "url" | "select" | "boolean";
+export type FieldType = "text" | "textarea" | "richtext" | "image" | "date" | "url" | "select" | "boolean" | "file";
 
 export interface FieldDef {
   key: string;
@@ -123,6 +123,7 @@ export const COLLECTIONS: CollectionDef[] = [
       { key: "whatsapp", label: "No HP/WA", type: "text", required: true },
       { key: "aspirasi", label: "Isi aspirasi", type: "textarea", required: true },
       { key: "opdTarget", label: "OPD tujuan", type: "text" },
+      { key: "ktpPath", label: "Lampiran KTP", type: "file" },
       { key: "status", label: "Status tindak lanjut", type: "select", options: ["baru", "diproses", "selesai"], required: true },
     ],
   },

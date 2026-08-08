@@ -22,3 +22,12 @@ export function shade(hex: string, percent: number) {
     return hex;
   }
 }
+
+export function hexToRgbTriplet(hex: string): string {
+  try {
+    const { r, g, b } = hexToRgb(hex);
+    return `${r}, ${g}, ${b}`;
+  } catch {
+    return "254, 80, 0";
+  }
+}

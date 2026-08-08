@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
+import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import BottomNav from "@/components/layout/BottomNav";
 import FloatingButtons from "@/components/layout/FloatingButtons";
 import { getSettings } from "@/lib/settings";
-import { shade } from "@/lib/color";
+import { shade, hexToRgbTriplet } from "@/lib/color";
+
+// Fraunces buat headline/kutipan (serif hangat, bukan sans generik) +
+// Plus Jakarta Sans buat body/UI — dipilih sengaja, bukan default AI.
+const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-display", weight: ["500", "600"], style: ["normal", "italic"] });
+const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-body", weight: ["400", "500", "600", "700", "800"] });
 
 // Data tokoh dibaca ulang tiap request, bukan di-cache saat build —
 // supaya perubahan di panel /admin langsung tampak tanpa perlu redeploy.
@@ -56,7 +62,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     description: s.deskripsiSingkat,
     url: s.siteUrl,
     image: s.banner || undefined,
-    sameAs: [s.facebook, s.instagram, s.twitter, s.tiktok, s.telegram].filter(Boolean),
+    sameAs: [s.facebook, s.instagram, s.twitter, s.tiktok, s.telegram, s.youtube].filter(Boolean),
   };
 
   return (
@@ -67,12 +73,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             render pertama, tanpa "kedip" warna default lalu ganti di client. */}
         <style
           dangerouslySetInnerHTML={{
-            __html: `:root{--color-brand:${brand};--color-brand-dark:${shade(brand, -20)};--color-brand-light:${shade(brand, 88)};}`,
+            __html: `:root{--color-brand:${brand};--color-brand-dark:${shade(brand, -20)};--color-brand-light:${shade(brand, 88)};--color-brand-rgb:${hexToRgbTriplet(brand)};}`,
           }}
         />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
       </head>
-      <body className="bg-gray-50 text-gray-800 font-sans antialiased">
+      <body className={`${fraunces.variable} ${plusJakarta.variable} bg-gray-50 text-gray-800 font-sans antialiased`}>
         <Navbar settings={s} />
         <main className="min-h-screen">{children}</main>
         <Footer settings={s} />

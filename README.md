@@ -111,3 +111,42 @@ di Vercel (yang jaringannya kebuka), build ini akan selesai normal.
 - [ ] Ganti `public/icons/icon-192.png` & `icon-512.png` dengan logo asli kalau ada (placeholder generik sudah tersedia, situs tetap layak jalan tanpa ini)
 - [ ] Tambahkan UID admin pertama di node `/admins` (lihat §1)
 - [ ] Set `NEXT_PUBLIC_SITE_URL` ke domain final tokoh tsb sebelum deploy produksi (dipakai di canonical URL, sitemap, OG image)
+
+## 12. Audit lanjutan (putaran "cek semua")
+
+- **Lampiran KTP di Aspirasi sekarang bisa dibuka dari panel**: `/admin/aspirasi` → edit salah satu data →
+  ada tombol "Lihat Lampiran" yang generate link sementara ke Storage (butuh akun admin yang emailnya ada
+  di `storage.rules`, lihat §1). Sebelumnya lampiran ini kesimpen tapi nggak ada jalan buka dari admin.
+- **Preview gambar** sekarang muncul di semua field bertipe "image" pada form CRUD (Gagasan/Galeri/Event/
+  Section Profil), dan daftar item di `/admin/[koleksi]` juga nampilin thumbnail kecil — bukan cuma teks judul.
+- Sudah dites ulang: `npm install` + `npx tsc --noEmit` lolos bersih (exit code 0) setelah semua perubahan di atas.
+
+## 13. Desain hero baru (foto tokoh terbungkus gradasi)
+
+Beranda & Profil sekarang pakai satu komponen (`components/section/Hero.tsx`) dengan gaya majalah:
+- Foto banner dibungkus gradasi warna brand — **tipis di kiri** (wajah tokoh tetap kebaca, cuma kena
+  semburat warna) makin **pekat ke kanan** (jadi panggung kontras buat teks putih). Di HP, arah gradasinya
+  otomatis berubah dari bawah (teks) ke atas (foto bersih) karena nggak ada ruang buat susunan kiri-kanan.
+- **Kutipan sebagai headline** (bukan nama gede polos) — isi di field baru **"Kutipan Headline Hero"**
+  di `/admin/pengaturan`. Kalau dikosongin, otomatis fallback ke nama tokoh.
+- Tipografi sengaja dipilih biar nggak kerasa template: **Fraunces** (serif hangat, italic) buat kutipan,
+  **Plus Jakarta Sans** buat body/UI — bukan font default.
+- Warna gradasinya dihitung otomatis dari 1 warna brand yang diisi di Pengaturan Situs (`lib/color.ts`
+  `hexToRgbTriplet`) — ganti warna brand, gradasi hero ikut berubah, nggak perlu sentuh kode.
+
+## 14. Upload gambar ke Cloudinary langsung dari panel
+
+Semua field bertipe gambar (banner, cover artikel, poster event, foto galeri, dst) sekarang punya tombol
+**Upload** di sebelah kolom URL — pilih file, otomatis ke-upload ke Cloudinary dan URL-nya keisi sendiri.
+Setup:
+1. Daftar gratis di [cloudinary.com](https://cloudinary.com)
+2. Settings → Upload → Upload presets → **Add upload preset** → mode **Unsigned** → simpan nama presetnya
+3. Isi `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` (nama akun Cloudinary-mu) dan `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET`
+   (nama preset tadi) di Environment Variables Vercel + `.env.local`
+
+Kalau 2 env var itu dikosongin, field gambar masih tetap bisa dipakai dengan cara tempel URL manual seperti
+sebelumnya (tombol Upload aja yang nggak muncul/gagal) — jadi nggak wajib pakai Cloudinary.
+
+**Catatan keamanan**: unsigned upload preset Cloudinary bisa dipanggil siapa saja yang tahu nama presetnya
+(bukan cuma dari panel admin ini) — itu batasan bawaan Cloudinary, orang lain paling bisa upload gambar,
+bukan curi data situs. Kalau mau lebih ketat, ganti ke signed upload lewat API route sendiri nanti.

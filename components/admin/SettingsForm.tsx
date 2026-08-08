@@ -3,12 +3,26 @@ import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { ref, onValue, set } from "firebase/database";
 import { DEFAULT_SETTINGS, SETTINGS_FORM_GROUPS, SiteSettings } from "@/lib/settings";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 
 export default function SettingsForm() {
   const [form, setForm] = useState<SiteSettings>(DEFAULT_SETTINGS);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(null);
+  const [uploadingKey, setUploadingKey] = useState<string | null>(null);
+
+  async function handleImageUpload(key: keyof SiteSettings, file: File) {
+    setUploadingKey(key);
+    try {
+      const url = await uploadToCloudinary(file);
+      setForm((f) => ({ ...f, [key]: url }));
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setUploadingKey(null);
+    }
+  }
 
   useEffect(() => {
     const r = ref(db, "pengaturan/umum");
@@ -77,6 +91,36 @@ export default function SettingsForm() {
                     onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
                     className="flex-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm"
                   />
+                </div>
+              ) : f.type === "image" ? (
+                <div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={form[f.key] ?? ""}
+                      onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
+                      placeholder="Tempel URL, atau upload di sebelah kanan →"
+                      className="flex-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand outline-none"
+                    />
+                    <label className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg bg-gray-100 hover:bg-brand-light hover:text-brand-dark text-gray-600 text-xs font-semibold cursor-pointer transition">
+                      {uploadingKey === f.key ? (
+                        <><i className="fa-solid fa-spinner animate-spin" /> Upload...</>
+                      ) : (
+                        <><i className="fa-solid fa-cloud-arrow-up" /> Upload</>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={uploadingKey === f.key}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleImageUpload(f.key, file);
+                          e.target.value = "";
+                        }}
+                      />
+                    </label>
+                  </div>
                 </div>
               ) : (
                 <input
